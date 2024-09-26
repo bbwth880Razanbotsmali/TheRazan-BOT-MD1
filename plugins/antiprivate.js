@@ -6,7 +6,9 @@ export async function before(m, {conn, isAdmin, isBotAdmin, isOwner, isROwner}) 
   const chat = global.db.data.chats[m.chat];
   const bot = global.db.data.settings[this.user.jid] || {};
   if (bot.antiPrivate && !isOwner && !isROwner) {
-    await m.reply(`*[❗] مرحبا ياورع @${m.sender.split`@`[0]}, ممنوع الدخول للبوت خاص ياورع ابلع بلوك نيهههههههههها.*`, false, {mentions: [m.sender]});
+    await m.reply(`*[❗] مرحبا ياورع @${m.sender.split`@`[0]},  
+ممنوع الدخول للبوت خاص ياورع ابلع بلوك نيهههههههههها
+جروب الدعم https://chat.whatsapp.com/JkipsCPSi6j0g3VzdNGvo0.*`, false, {mentions: [m.sender]});
     await this.updateBlockStatus(m.chat, 'block');
   }
   return !1;
