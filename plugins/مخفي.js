@@ -1,8 +1,3 @@
-//هارلي بيمسي عليكم ياض منك ليه 
-//المصدر https://whatsapp.com/channel/0029VaXddtu0lwgiREisx82C  𝐻𝐴𝑅𝐿𝐸𝑌 ⚡ 𝐶𝛩𝐷𝐼𝑁𝐺
-//تغير المصدر افشخك واخليك شبه المعزة دي 🐏🐦
-
-
 import {generateWAMessageFromContent} from '@whiskeysockets/baileys';
 import * as fs from 'fs';
 const handler = async (m, {conn, text, participants, isOwner, isAdmin}) => {
