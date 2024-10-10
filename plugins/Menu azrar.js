@@ -12,39 +12,44 @@ const handler = async (m, {conn, usedPrefix, usedPrefix: _p, __dirname, text, is
     let d = new Date(new Date + 3600000);
     let locale = 'ar';
     let week = d.toLocaleDateString(locale, { weekday: 'long' });
+    let time = d.toLocaleDateString(locale, { time: 'long' });
     let date = d.toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' });
     let _uptime = process.uptime() * 1000;
     let uptime = clockString(_uptime);
     let user = global.db.data.users[m.sender];
     let name = conn.getName(m.sender)
     let { money, joincount } = global.db.data.users[m.sender];
-    let { exp, limit, level, role } = global.db.data.users[m.sender];
+    let { exp, limit, level, role, health, crystal, upgrader, wood } = global.db.data.users[m.sender];
     let rtotalreg = Object.values(global.db.data.users).filter(user => user.registered == true).length;
     let more = String.fromCharCode(8206);
     let readMore = more.repeat(850);
     let who = m.mentionedJid && m.mentionedJid[0] ? m.mentionedJid[0] : m.fromMe ? conn.user.jid : m.sender
     let taguser = '@' + m.sender.split("@s.whatsapp.net")[0];
   await conn.sendMessage(m.chat, { react: { text: '📂', key: m.key } })
-  const zack = 'https://envs.sh/wHc.jpg'
+  const zack = 'https://qu.ax/KiYlK.jpg'
   const mentionId = m.key.participant || m.key.remoteJid;
  
-conn.relayMessage(m.chat, { viewOnceMessage: { message: { interactiveMessage: { header: { title: `harley`}, body: { text: `˼⚡˹↜ مـࢪحـبـا بـك/ي @${mentionId.split('@')[0]}
+conn.relayMessage(m.chat, { viewOnceMessage: { message: { interactiveMessage: { header: { title: `zack`}, body: { text: `˼⚡˹↜ مـࢪحـبـا بـك/ي @${mentionId.split('@')[0]}
 > ˼🪪˹↜ مــعــلــومــاتــك ↶
 ╮───────────────────⟢ـ
 ┆⚡↜ بـريـمـيـوم↞⌊ ${user.premiumTime > 0 ? 'مــمـ🔱ـيز' : (isPrems ? 'مــمـ🔱ـيز' : 'عــ🍁ــادي') || ''} ⌉
 ┆⚜️↜ مـــســـتواك↞⌊ ${level} ⌉
 ┆💫↜ رتـبـتـك↞⌊ ${role} ⌉
-┆🧰↜ الـخـبـرة↞⌊ ${exp} ⌉
-┆💎↜ الـمـاس↞⌊ ${limit} ⌉
+┆💷↜ فــلــوســك↞⌊ ${exp} ⌉
+┆🪙↜ الــذهــب↞⌊ ${limit} ⌉
+┆❤↜ الــصــحــة↞⌊ ${health} ⌉
+┆🧰↜ الــخــبــرة↞⌊ ${upgrader} ⌉
 ╯───────────────────⟢ـ
 > ˼🤖˹↜ الــبــوت↶
 ╮───────────────────⟢ـ
-┆⚙️ ↜اسـم الـبـوت↶﹝𝑅𝐴𝑍𝐴𝑁﹞
-┆🪄 ↜الـمـطـور ↶﹝967779151032+﹞
+┆⚙️ ↜اسـم الـبـوت↶﹝رزان﹞
+┆🪄 ↜الـمـطـور ↶﹝عاشق التحدي﹞
 ┆📌 ↜الـتـشـغـيـل ↶﹝${uptime}﹞
+┆🎪 ↜الــيــوم ↶﹝${week}﹞
+┆⌚ ↜الـتـاريـخ ↶﹝${time}﹞
 ┆🔖 ↜الــمــســتـخـدمـيـن ↶﹝${rtotalreg}﹞
 ╯───────────────────⟢ـ
-> © التحدي & عاشق 2025`,subtitle: "Araab Zack",},header: { hasMediaAttachment: true,...(await prepareWAMessageMedia({ image : { url: zack } }, { upload: conn.waUploadToServer }, {quoted: m}))},
+> © 𝑅𝐴𝑍𝐴𝑁 𝐵𝑂َ𝑇`,subtitle: "zack",},header: { hasMediaAttachment: true,...(await prepareWAMessageMedia({ image : { url: zack } }, { upload: conn.waUploadToServer }, {quoted: m}))},
                     contextInfo: {
                         mentionedJid: [m.sender],
                         isForwarded: false,
@@ -54,11 +59,11 @@ conn.relayMessage(m.chat, { viewOnceMessage: { message: { interactiveMessage: { 
                             {
                                 name: 'single_select',
                                 buttonParamsJson: JSON.stringify({
-                                    title: '⌈🛡╎الــقــوائـــم╎🛡⌋',
+                                    title: '⌈🛡╎المهام╎🛡⌋',
                                     sections: [
                                         {
                                             title: 'مــرحـ🛡ـبــا بــك فـي مــ☑هــام رزان بـ🤖ـوت',
-                                            highlight_label: 'بعبص براحتك في البوت يا حب 🤖',
+                                            highlight_label: 'RAZAN_BOT',
                                             rows: [
                                                 {
                                                     header: 'الــقـ👑ـســم الـاول',
@@ -115,17 +120,23 @@ conn.relayMessage(m.chat, { viewOnceMessage: { message: { interactiveMessage: { 
                                                     id: '.ق8'
                                                 },
                                                 {
-                                                    header: 'الــقـ🔍ـســم �لــحــاديــة عــشــر',
-                                                    title: 'استدعاء_قسم_ابحث #البحث',
+                                                                                                        header: 'الــقـ🏦ـســم الــثــانــي عــشــر',
+                                                    title: 'استدعاء_قسم_البنك #بنكك',
                                                     description: '',
-                                                    id: '.ق11'
+                                                    id: '.بنكك'
+                                                },
+                                                {
+                                                    header: 'الــقـ🎟️ـســم الــثــالــث عــشــر',
+                                                    title: 'استدعاء_قسم_الانمي #الانمي',
+                                                    description: '',
+                                                    id: '.ق12' 
                                                }
                                             ]
                                         }
                                     ]
                                 }),
                   messageParamsJson: ''
-                                 },
+                     },
                      {
               name: "quick_reply",
               buttonParamsJson: '{"display_text":"⌈🎗╎فــعــالــيــات╎🎗⌋","id":".الفعاليات"}'
@@ -143,6 +154,10 @@ name: "quick_reply",
               buttonParamsJson: '{"display_text":"⌈🙌╎تقيم البوت╎🙌⌋","id":".تقيم"}'
                      },
                      {
+name: "quick_reply",
+              buttonParamsJson: '{"display_text":"⌈🙌╎معلوماتك╎🙌⌋","id":".بروفايل"}'
+                     },
+                     {
                name: "cta_url",
                buttonParamsJson: '{"display_text":"⌈📲╎قـنـاة الــبــوت╎📲⌋","url":"https://whatsapp.com/channel/0029VakNAD45EjxrEGdI2b0d","merchant_url":"https://whatsapp.com/channel/0029VakNAD45EjxrEGdI2b0d"}'
                             }
@@ -156,6 +171,6 @@ name: "quick_reply",
 
 handler.help = ['info'];
 handler.tags = ['main'];
-handler.command = ['menu', 'مهام', 'اوامر','الاوامر','قائمة','القائمة']
+handler.command = ['ppppp', 'مهام', 'pppp','قائمة','القائمة']
 
 export default handler;
