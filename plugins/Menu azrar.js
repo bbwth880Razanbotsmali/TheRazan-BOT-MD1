@@ -125,6 +125,22 @@ conn.relayMessage(m.chat, { viewOnceMessage: { message: { interactiveMessage: { 
                                     ]
                                 }),
                   messageParamsJson: ''
+                                 },
+                     {
+              name: "quick_reply",
+              buttonParamsJson: '{"display_text":"⌈🎗╎فــعــالــيــات╎🎗⌋","id":".الفعاليات"}'
+                     },
+                     {
+              name: "quick_reply",
+              buttonParamsJson: '{"display_text":"⌈🙌╎الاستخدام╎🙌⌋","id":".الاستخدام"}'
+                     },
+                     {
+name: "quick_reply",
+              buttonParamsJson: '{"display_text":"⌈🙌╎الشرح╎🙌⌋","id":".الشرح"}'
+                     },
+                     {
+name: "quick_reply",
+              buttonParamsJson: '{"display_text":"⌈🙌╎تقيم البوت╎🙌⌋","id":".تقيم"}'
                      },
                      {
                name: "cta_url",
