@@ -1,44 +1,194 @@
-import fetch from "node-fetch"
-import cheerio from "cheerio"
+import axios from 'axios';
+import { prepareWAMessageMedia, generateWAMessageFromContent } from '@whiskeysockets/baileys';
 
-let handler = async (m, {
-    text,
-    usedPrefix,
-    command
-}) => {
-if (!text) throw `ضع اسم دولتك بي الإنجليزية مثال: \n ${usedPrefix + command} egypt`
-    try {
-            let res = await fetchPrayerTimes(text)
-            m.reply(`${Object.entries(res).map(([name, data]) => `صلاة *${name}* : ${data}`).join('\n').trim()}`.trim())
-        } catch (e) {
-            m.reply(eror)
+const countries = {
+     "المغرب": {
+        capital: "الرباط",
+         code: "MA",
+          emoji: "🇲🇦"
+    }, 
+    "مصر": {
+        capital: "القاهرة",
+        code: "EG",
+        emoji: "🇪🇬"
+    },
+    "السعودية": {
+        capital: "الرياض",
+        code: "SA",
+        emoji: "🇸🇦"
+    },
+    "الإمارات": {
+        capital: "ابوظبي",
+        code: "AE",
+        emoji: "🇦🇪"
+    },
+    "الكويت": {
+        capital: "الكويت",
+        code: "KW",
+        emoji: "🇰🇼"
+    },
+    "قطر": {
+        capital: "الدوحة",
+        code: "QA",
+        emoji: "🇶🇦"
+    },
+    "البحرين": {
+        capital: "المنامة",
+        code: "BH",
+        emoji: "🇧🇭"
+    },
+    "عمان": {
+        capital: "مسقط",
+        code: "OM",
+        emoji: "🇴🇲"
+    },
+    "الأردن": {
+        capital: "عمان",
+        code: "JO",
+        emoji: "🇯🇴"
+    },
+    "لبنان": {
+        capital: "بيروت",
+        code: "LB",
+        emoji: "🇱🇧"
+    },
+    "العراق": {
+        capital: "بغداد",
+        code: "IQ",
+        emoji: "🇮🇶"
+    },
+    "اليمن": {
+        capital: "صنعاء",
+        code: "YE",
+        emoji: "🇾🇪"
+    },
+    "سوريا": {
+        capital: "Damascus",
+        code: "SY",
+        emoji: "🇸🇾"
+    },
+    "فلسطين": {
+        capital: "القدس",
+        code: "PS",
+        emoji: "🇵🇸"
+    },
+    "ليبيا": {
+        capital: "طرابلس",
+        code: "LY",
+        emoji: "🇱🇾"
+    },
+    "تونس": {
+        capital: "تونس",
+        code: "TN",
+        emoji: "🇹🇳"
+    },
+    "الجزائر": {
+        capital: "الجزائر",
+        code: "DZ",
+        emoji: "🇩🇿"
+    },
+    "السودان": {
+        capital: "الخرطوم",
+        code: "SD",
+        emoji: "🇸🇩"
+    },
+    "موريتانيا": {
+        capital: "نواكشوط",
+        code: "MR",
+        emoji: "🇲🇷"
+    }
+};
+
+function convertTo12HourFormat(time) {
+    const [hourString, minute] = time.split(':');
+    let hour = parseInt(hourString, 10);
+    const period = hour >= 12 ? 'مـسـائـاََ' : 'صـبـاحـاََ';
+    hour = hour % 12 || 12;
+    return `${hour}:${minute} ${period}`;
+}
+
+const handler = async (m, { text, conn }) => {
+    if (!text) {
+        let countryButtons = Object.keys(countries).map((country, index) => ({
+            header: country,
+            title: `${countries[country].emoji} ${country}`,
+            description: ``,
+            id: `.مواقيت_الصلاة ${country}`
+        }));
+
+        const buttonMessage = {
+            body: { text: '\n*اختر دولتك من خلال الزر اسفله :*' },
+            footer: { text: '' },
+            header: {
+                title: '> *إِنَّ الصَّلَاةَ كَانَتْ عَلَى الْمُؤْمِنِينَ كِتَابًا مَوْقُوتًا*',
+                hasMediaAttachment: false
+            },
+            nativeFlowMessage: {
+                buttons: [
+                    {
+                        name: 'single_select',
+                        buttonParamsJson: JSON.stringify({
+                            title: 'اخــتــر',
+                            sections: [
+                                {
+                                    title: '⌗ - اخـتـر بـلـدك :',
+                                    rows: countryButtons
+                                }
+                            ]
+                        }),
+                        messageParamsJson: ''
+                    }
+                ],
+                messageParamsJson: ''
+            }
+        };
+
+        let msg = generateWAMessageFromContent(m.chat, {
+            viewOnceMessage: {
+                message: {
+                    interactiveMessage: buttonMessage,
+                },
+            },
+        }, { userJid: conn.user.jid, quoted: m });
+
+        await conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id });
+    } else {
+        const country = text.trim();
+        const countryInfo = countries[country];
+        if (!countryInfo) {
+            return m.reply('*🌙 : المعذرة ماحصلت*');
         }
-}
-handler.help = ['adhan']
-handler.tags = ['islam']
-handler.command = /^(اذان|أذان|الاذان|الأذان)$/i
-export default handler
 
-async function fetchPrayerTimes(q) {
-  const url = 'https://athantime.me/' + q; // Ganti URL_HALAMAN_ADZAN dengan URL halaman web yang berisi informasi jadwal waktu adzan
+        try {
+            const response = await axios.get(`https://api.aladhan.com/v1/timingsByCity?city=${countryInfo.capital}&country=${countryInfo.code}`);
+            const data = response.data.data.timings;
+            const fajr = convertTo12HourFormat(data.Fajr);
+            const dhuhr = convertTo12HourFormat(data.Dhuhr);
+            const asr = convertTo12HourFormat(data.Asr);
+            const maghrib = convertTo12HourFormat(data.Maghrib);
+            const isha = convertTo12HourFormat(data.Isha);
 
-  try {
-    const response = await fetch(url);
-    const html = await response.text();
-    const $ = cheerio.load(html);
+            const message = `
+> توقيت الصلاة بمدينة *${countryInfo.capital}* 
 
-    const prayerTimes = {
-      تاريخ: $('b:contains("الأربعاء")').text().trim(), // Mengambil informasi tanggal adzan saat ini
-      الفجر: $('td:contains("موعد اذان الفجر")').next().text().trim(), // Mengambil waktu adzan Fajr
-      الضهر: $('td:contains("موعد اذان الظهر")').next().text().trim(), // Mengambil waktu adzan Dhuhr
-      العصر: $('td:contains("موعد اذان العصر")').next().text().trim(), // Mengambil waktu adzan Asr
-      المغرب: $('td:contains("موعد اذان المغرب")').next().text().trim(), // Mengambil waktu adzan Maghrib
-      العشاء: $('td:contains("موعد اذان العشاء")').next().text().trim(), // Mengambil waktu adzan Isha
-      الامساك: $('div.imsak li:contains("موعد الامساك اليوم")').text().trim().split(' ')[3], // Mengambil waktu imsak
-    };
-    return prayerTimes;
-  } catch (error) {
-    console.error('Terjadi kesalahan:', error);
-    return null;
-  }
-}
+- *الـفـجـر : ${fajr}*
+- *الـظـهـر : ${dhuhr}*
+- *الـعـصـر : ${asr}*
+- *الـمـغـرب : ${maghrib}*
+- *الـعـشـاء : ${isha}*
+
+> *التوقيت حسب عاصمة الدولة 🩵*`;
+
+            m.reply(message);
+        } catch (error) {
+            console.error('Error fetching prayer times:', error);
+            m.reply('> *🌙 : ايرور.*');
+        }
+    }
+};
+
+handler.help = ['اذان'];
+handler.tags = ['✨'];
+handler.command = /^(مواقيت_الصلاة|وقت_الصلاة|وقت_الصلاه|مواقيت_الصلاه|مواقيت|اذان|الاذان)$/i;
+
+export default handler;
