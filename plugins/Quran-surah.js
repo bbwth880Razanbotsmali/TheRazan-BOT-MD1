@@ -1,61 +1,63 @@
 import fetch from 'node-fetch';
-import translate from '@vitalets/google-translate-api';
+import { prepareWAMessageMedia, generateWAMessageFromContent, getDevice } from '@whiskeysockets/baileys';
 
-let quranSurahHandler = async (m, { conn, usedPrefix, command }) => {
-  try {
-    let surahInput = m.text.split(' ')[1];
+const handler = async (m, { conn, text, usedPrefix: prefijo }) => {
+    const device = await getDevice(m.key.id);
 
-    if (!surahInput) {
-      throw new Error(`يرجى تحديد رقم السورة\n\n    *${usedPrefix + command}* 1`);
-    }
+    const fkontak2 = {
+        key: {
+            participants: '0@s.whatsapp.net',
+            remoteJid: 'status@broadcast',
+            fromMe: false,
+            id: 'Halo'
+        },
+        message: {
+            contactMessage: {
+                displayName: `${m.pushName}`,
+                vcard: `BEGIN:VCARD\nVERSION:3.0\nN:Sy;Bot;;;\nFN:y\nitem1.TEL;waid=${m.sender.split('@')[0]}:${m.sender.split('@')[0]}\nitem1.X-ABLabel:Ponsel\nEND:VCARD`
+            }
+        },
+        participant: '0@s.whatsapp.net'
+    };
 
-    let surahListRes = await fetch('https://quran-endpoint.vercel.app/quran');
-    let surahList = await surahListRes.json();
+    if (device !== 'desktop' || device !== 'web') {      
+        const ne = await (await fetch('https://raw.githubusercontent.com/Hyodu/Moon/main/database/API/Quran.txt')).text();
+        const mo = ne.split('\n');
+        const moo = await mo[Math.floor(Math.random() * mo.length)];
+        if (moo == '') throw 'Error';
 
-    let surahData = surahList.data.find(surah => 
-        surah.number === Number(surahInput) || 
-        surah.asma.ar.short.toLowerCase() === surahInput.toLowerCase() || 
-        surah.asma.en.short.toLowerCase() === surahInput.toLowerCase()
-    );
+        var Moonvideo = await prepareWAMessageMedia({ video: {url: moo}}, { upload: conn.waUploadToServer });
+        const interactiveMessage = {
+            body: { text: '*آجر لي ولك 🌸*' },
+            header: {
+                hasMediaAttachment: true,
+                videoMessage: Moonvideo.videoMessage,
+            },
+            nativeFlowMessage: {
+                buttons: [
+                    {
+                        "name": "quick_reply",
+                        "buttonParamsJson": "{\"display_text\":\"الــتــالــي\",\"id\":\".قرآن\"}"
+                    }
+                ],
+                messageParamsJson: ''
+            }
+        };        
 
-    if (!surahData) {
-      throw new Error(`تعذر العثور على سورة برقم أو اسم "${surahInput}"`);
-    }
+       let msg = generateWAMessageFromContent(m.chat, {
+            viewOnceMessage: {
+                message: {
+                    interactiveMessage,
+                },
+            },
+        }, { userJid: conn.user.jid, quoted: fkontak2 });
+        conn.relayMessage(m.chat, msg.message, { messageId: msg.key.id });
 
-    let res = await fetch(`https://quran-endpoint.vercel.app/quran/${surahData.number}`);
-    
-    if (!res.ok) {
-      let error = await res.json(); 
-      throw new Error(`فشل طلب واجهة برمجة التطبيقات بالحالة ${res.status} والرسالة ${error.message}`);
-    }
-
-    let json = await res.json();
-
-
-    // Translate tafsir from Bahasa Indonesia to AR
-    let translatedTafsirar = await translate(json.data.tafsir.id, { to: 'ar', autoCorrect: true });
-
-    let quranSurah = `
-🕌 *القرآن: الكتاب المقدس*\n
-📜 *سورة ${json.data.number}: ${json.data.asma.ar.long}*\n
-النوع: ${json.data.type.ar}\n
-عدد الآيات: ${json.data.ayahCount}\n
-🔮 *التوضيح (عربي):*\n
-${translatedTafsirar.text}`;
-
-    m.reply(quranSurah);
-
-    if (json.data.recitation.full) {
-      conn.sendFile(m.chat, json.data.recitation.full, 'quran.mp3', null, m, true, { type: 'audioMessage', ptt: true });
-    }
-  } catch (error) {
-    console.error(error);
-    m.reply(`خطأ: ${error.message}`);
-  }
-};
-
-quranSurahHandler.help = ['quran [surah_number|surah_name]'];
-quranSurahHandler.tags = ['quran', 'surah'];
-quranSurahHandler.command = ['quran', 'surah','القران','قران','القرآن','قرآن']
-
-export default quranSurahHandler;
+    } else {
+        conn.sendFile(m.chat, 'moon.jpg', m, { quoted: fkontak2 });      
+    }    
+}; 
+handler.help = ['Quran'];
+handler.tags = ['✨'];
+handler.command = /^(قرآن|قرأن|ايات|القرآن|القرأن|القران|قران)$/i;
+export default handler;
