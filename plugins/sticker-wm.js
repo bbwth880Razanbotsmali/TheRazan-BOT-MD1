@@ -15,7 +15,7 @@ console.error(e)
 if (Buffer.isBuffer(e)) stiker = e
 } finally {
 if (stiker) conn.sendFile(m.chat, stiker, 'sticker.webp', '',m, true, { contextInfo: { 'forwardingScore': 200, 'isForwarded': false, externalAdReply:{ showAdAttribution: false, title: wm, body: ` Razan bot +967734115558`, mediaType: 2, sourceUrl: canal1, thumbnail: imagen1}}}, { quoted: m })
-else throw '╰⊱❗️⊱ *الامر واقف يابن الفقرية 🗿* ⊱❗️⊱╮'
+else throw '╰⊱❗️⊱ *الامر واقف  🗿* ⊱❗️⊱╮'
 }}
 handler.help = ['wm <packname>|<author>']
 handler.tags = ['sticker']
