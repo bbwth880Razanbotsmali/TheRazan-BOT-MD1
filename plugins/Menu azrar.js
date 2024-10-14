@@ -147,10 +147,6 @@ conn.relayMessage(m.chat, { viewOnceMessage: { message: { interactiveMessage: { 
                      },
                      {
 name: "quick_reply",
-              buttonParamsJson: '{"display_text":"⌈🙌╎الشرح╎🙌⌋","id":".الشرح"}'
-                     },
-                     {
-name: "quick_reply",
               buttonParamsJson: '{"display_text":"⌈🙌╎تقيم البوت╎🙌⌋","id":".تقيم"}'
                      },
                      {
