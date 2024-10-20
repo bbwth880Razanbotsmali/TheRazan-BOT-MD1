@@ -89,7 +89,7 @@ const handler = async (m, { text, conn, usedPrefix, command }) => {
 
 handler.help = ['groups', 'grouplist'];
 handler.tags = ['info'];
-handler.command = ['المجموعات', 'مجموعات'];
+handler.command = ['جروبات', 'مجموعات'];
 handler.rowner = true;
 
 export default handler;
