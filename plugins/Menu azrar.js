@@ -144,6 +144,10 @@ name: "quick_reply",
                      {
                name: "cta_url",
                buttonParamsJson: '{"display_text":"⌈📲╎قـنـاة الــبــوت╎📲⌋","url":"https://whatsapp.com/channel/0029VakNAD45EjxrEGdI2b0d","merchant_url":"https://whatsapp.com/channel/0029VakNAD45EjxrEGdI2b0d"}'
+},
+                     {
+               name: "cta_url",
+               buttonParamsJson: '{"display_text":"⌈📱╎المطور ╎📱⌋","url":"https://whatsapp.com/channel/0029VakNAD45EjxrEGdI2b0d","merchant_url":"https://whatsapp.com/channel/0029VakNAD45EjxrEGdI2b0d"}'
                             }
                         ]
                     }
