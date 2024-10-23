@@ -13,8 +13,8 @@ import { en, es, id, ar, pt } from "./lib/idiomas/total-idiomas.js"
 // [ES] > Agrega el número que será Bot y los que serán propietarios.
 // [EN] > Add the number that will be Bot and those that will be owners.
 global.owner = [
-["967779151032", '👑 عاشق التحدي 👑', true], //𝙂𝙖𝙩𝙖𝘽𝙤𝙩-𝙈𝘿 💖🐈
-["967734115558", '💫 RAZAN_BOT 💫', true], //𝙂𝙖𝙩𝙖𝘽𝙤𝙩-𝙈𝘿 💖🐈
+["967779151032", '👑 عاشق-التحدي 👑', true], //𝙂𝙖𝙩𝙖𝘽𝙤𝙩-𝙈𝘿 💖🐈
+["967734115558", '💫 𝑅𝐴𝑍𝐴𝑁_𝐵𝑂َ𝑇 💫', true], //𝙂𝙖𝙩𝙖𝘽𝙤𝙩-𝙈𝘿 💖🐈
 ]
 
 
@@ -117,9 +117,9 @@ global.moment = moment
 // [ES] > Agregate a ti, colaboradores o ayudates, aparecerá en el comando de lista de contactos.
 // [EN] > Adding yourself, collaborators or helpers will appear in the contact list command.
 global.official = [ // Agregate si eres Owner
-["967779151032", '👑 عاشق التحدي👑', 1], 
-["967734115558", '💫 RAZAN_BOT💫', 1],  
-["967779151032", '👑 عاشق التحدي 👑', 1]]
+["967779151032", '👑 عاشق-التحدي 👑', 1], 
+["967734115558", '💫 𝑅𝐴𝑍𝐴𝑁_𝐵𝑂َ𝑇 💫', 1],  
+["967779151032", '👑 عاشق-التحدي 👑', 1]]
 
 global.mail = '' // Add email
 global.desc = '' // Add short description (20 caractres max)
@@ -127,7 +127,7 @@ global.desc2 = '' // Add long description (90 caractres max) (Este parámetro se
 global.country = '' // Add country, example: 🇪🇨
 // • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
 
-global.packname = `𝑅𝐴𝑍𝐴𝑁﹝⚡️﹞𝐵𝑂َ𝑇` //"𝙂𝙖𝙩𝙖𝘽𝙤𝙩-𝙈𝘿 🐈"
+global.packname = `𝑅𝐴𝑍𝐴𝑁﹝😇﹞𝐵𝑂َ𝑇` //"𝙂𝙖𝙩𝙖𝘽𝙤𝙩-𝙈𝘿 🐈"
 global.author = `𝑅𝐴𝑍𝐴𝑁_𝐵𝑂َ𝑇` //"𝙂𝙖𝙩𝙖 𝘿𝙞𝙤𝙨"
 
 // • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
@@ -164,7 +164,7 @@ global.eg = '╰⊱💚⊱ *𝙀́𝙓𝙄𝙏𝙊 | 𝙎𝙐𝘾𝘾𝙀𝙎�
 global.exito = eg
 
 // • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
-global.wm = "𝑅𝐴𝑍𝐴𝑁﹝⚡️﹞𝐵𝑂َ𝑇"
+global.wm = "𝑅𝐴𝑍𝐴𝑁﹝😇﹞𝐵𝑂َ𝑇"
 global.igfg = "𝑅𝐴𝑍𝐴𝑁_𝐵𝑂َ𝑇"
 global.nomorown = "967779151032"
 global.pdoc = ["application/vnd.openxmlformats-officedocument.presentationml.presentation", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/vnd.ms-excel", "application/msword", "application/pdf", "text/rtf"]
